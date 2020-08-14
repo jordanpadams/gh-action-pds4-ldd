@@ -71,8 +71,9 @@ else
 fi
 
 java_cmd=$(which java)
-echo $java_cmd
-parent_dir=$(dirname $JAVA_CMD)
+echo "Java: $java_cmd"
+java -version
+parent_dir=$(dirname $java_cmd)
 # export JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
 
 log_info "Generating dictionaries for $files"
