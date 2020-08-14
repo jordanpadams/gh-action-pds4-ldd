@@ -68,6 +68,7 @@ else
 fi
 
 JAVA_CMD=`which java`
+echo $(dirname $(dirname $JAVA_CMD))
 export JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
 
 log_info "Generating dictionaries for $files"
