@@ -27,6 +27,8 @@ if [ -z "$dirpath" ]; then
     log_error "Valid directory path must be specified (dirpath)."
 fi
 
+dirpath=$GITHUB_WORKSPACE/$dirpath
+
 if [ ! -z "$verbose" ] && [ "$verbose" == "true" ]; then
     DEBUG=0
 fi
@@ -51,13 +53,12 @@ im_version_alpha=$(echo $alpha_version)
 # Download and Unpack LDDTool
 wget --directory-prefix=/tmp https://github.com/NASA-PDS/pds4-information-model/releases/download/v${lddtool_version}/lddtool-${lddtool_version}-bin.tar.gz
 tar -xf /tmp/lddtool-${lddtool_version}-bin.tar.gz -C /tmp/
-echo $GITHUB_WORKSPACE
 
 # Generate Dictionaries
 log_info " Cleanup development versions if they exist"
 echo "dirpath: $dirpath"
-echo $(dirname $dirpath)
-rm -fr $(dirname $dirpath)
+echo `dirname $dirpath`
+rm -fr `dirname $dirpath`
 mkdir -p $dirpath
 cd $dirpath
 
