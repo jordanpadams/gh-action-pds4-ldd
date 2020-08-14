@@ -58,14 +58,13 @@ tar -xf /tmp/lddtool-${lddtool_version}-bin.tar.gz -C /tmp/
 # Generate Dictionaries
 log_info " Cleanup development versions if they exist"
 parent_dir=$(dirname $dirpath)
-echo $parent_dir
 rm -fr $parent_dir
 mkdir -p $dirpath
 cd $dirpath
 
 log_info "Generate dictionaries"
 dependencies_dir=$GITHUB_WORKSPACE/src/dependencies
-if [ -d "$dependencies_dir" ]; then
+if ls $dependencies_dir/*/src/*IngestLDD*.xml 1> /dev/null 2>&1 ; then
   files="$dependencies_dir/*/src/*IngestLDD*.xml $GITHUB_WORKSPACE/src/*IngestLDD*.xml"
 else
   files="$GITHUB_WORKSPACE/src/*IngestLDD*.xml"
