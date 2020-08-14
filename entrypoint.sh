@@ -37,10 +37,10 @@ fi
 lddtool_version=$(curl --silent "https://api.github.com/repos/NASA-PDS/pds4-information-model/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')
 
 # Get Latest IM Version
-im_version=$(curl --silent "https://raw.githubusercontent.com/NASA-PDS/pds4-information-model/v${ lddtool_version}/model-ontology/src/ontology/Data/config.properties" | grep 'infoModelVersionId' | awk -F= '{print $NF}')
+im_version=$(curl --silent "https://raw.githubusercontent.com/NASA-PDS/pds4-information-model/v${lddtool_version}/model-ontology/src/ontology/Data/config.properties" | grep 'infoModelVersionId' | awk -F= '{print $NF}')
 
 # Convert IM Version
-$(python3 -c "
+$(python -c "
 import string
 import os
 alphadict = dict(zip(range(10), range(10)))
