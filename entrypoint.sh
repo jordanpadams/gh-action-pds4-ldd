@@ -35,7 +35,7 @@ fi
 lddtool_version=$(curl --silent "https://api.github.com/repos/NASA-PDS/pds4-information-model/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')
 
 # Get Latest IM Version
-im_version=$(curl --silent "https://raw.githubusercontent.com/NASA-PDS/pds4-information-model/v${{ env.LDDTOOL_VERSION }}/model-ontology/src/ontology/Data/config.properties" | grep 'infoModelVersionId' | awk -F= '{print $NF}')
+im_version=$(curl --silent "https://raw.githubusercontent.com/NASA-PDS/pds4-information-model/v${lddtool_version}/model-ontology/src/ontology/Data/config.properties" | grep 'infoModelVersionId' | awk -F= '{print $NF}')
 
 # Convert IM Version
 $(python -c "
@@ -49,8 +49,8 @@ print(''.join(str(alphadict[int(val)]) for val in '$im_version'.split('.')))
 im_version_alpha=$(echo $alpha_version)
 
 # Download and Unpack LDDTool
-wget --directory-prefix=/tmp https://github.com/NASA-PDS/pds4-information-model/releases/download/v$LDDTOOL_VERSION/lddtool-$LDDTOOL_VERSION-bin.tar.gz
-tar -xf /tmp/lddtool-$LDDTOOL_VERSION-bin.tar.gz -C /tmp/
+wget --directory-prefix=/tmp https://github.com/NASA-PDS/pds4-information-model/releases/download/v${lddtool_version}/lddtool-${lddtool_version}-bin.tar.gz
+tar -xf /tmp/lddtool-${lddtool_version}-bin.tar.gz -C /tmp/
 echo $GITHUB_WORKSPACE
 
 # Generate Dictionaries
