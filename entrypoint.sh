@@ -71,10 +71,7 @@ else
 fi
 
 java_cmd=$(which java)
-echo "Java: $java_cmd"
-java -version
-parent_dir=$(dirname $java_cmd)
-# export JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
+export JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
 
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
