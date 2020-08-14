@@ -56,8 +56,6 @@ tar -xf /tmp/lddtool-${lddtool_version}-bin.tar.gz -C /tmp/
 
 # Generate Dictionaries
 log_info " Cleanup development versions if they exist"
-echo "dirpath: $dirpath"
-echo dirname $dirpath
 parent_dir=$(dirname $dirpath)
 echo $parent_dir
 rm -fr $parent_dir
@@ -72,9 +70,10 @@ else
   files="$GITHUB_WORKSPACE/src/*IngestLDD*.xml"
 fi
 
-JAVA_CMD=`which java`
-echo $(dirname $(dirname $JAVA_CMD))
-export JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
+java_cmd=$(which java)
+echo $java_cmd
+parent_dir=$(dirname $JAVA_CMD)
+# export JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
 
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
