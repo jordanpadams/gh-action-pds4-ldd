@@ -70,7 +70,7 @@ rm -fr $(dirname $dirpath)
 mkdir -p $dirname
 cd $dirname
 
-log_info " Generate dictionaries"
+log_info "Generate dictionaries"
 dependencies_dir=$GITHUB_WORKSPACE/src/dependencies
 if [ -d "$dependencies_dir" ]; then
   files="$dependencies_dir/*/src/*IngestLDD*.xml $GITHUB_WORKSPACE/src/*IngestLDD*.xml"
@@ -78,7 +78,7 @@ else
   files="$GITHUB_WORKSPACE/src/*IngestLDD*.xml"
 fi
 
-echo "+++ Generating dictionaries for $files"
+log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
 
 exit $?

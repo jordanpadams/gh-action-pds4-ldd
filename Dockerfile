@@ -9,7 +9,7 @@ FROM ubuntu:18.04
 # --------
 
 LABEL "com.github.actions.name"="PDS LDD Generation"
-LABEL "com.github.actions.description"="Generated PDS4 Local Data Dictionaries from IngestLDDs with 
+LABEL "com.github.actions.description"="Generated PDS4 Local Data Dictionaries from IngestLDDs with LDDTool"
 LABEL "com.github.actions.icon"="archive"
 LABEL "com.github.actions.color"="green"
 
