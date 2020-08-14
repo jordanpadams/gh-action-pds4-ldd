@@ -1,0 +1,40 @@
+# 📡 PDS Engineering: Git Ping Action
+# ===================================
+#
+# This is a GitHub action that:
+# • Pings a remote repository on GitHub
+# • (By submitting an empty commit)
+# • And noting else!
+
+---
+
+name: '✅ PDS Engineering: PDS Validate'
+author: 'Jordan Padams <jordan.h.padams@jpl.nasa.gov>'
+branding:
+  icon: 'flag'
+  color: 'blue'
+
+inputs:
+  dirpath:
+    description: |
+      Absolute path to data to validate
+    required: true
+  pds4_version:
+    description: |
+      PDS4 Information Model Version. Defaults to the latest version. Use the semantic version, e.g. 1.14.0.0
+    required: false
+    default: 'latest'
+  release:
+    description: |
+      Flag to specify if this is intended as a release or a development build.
+    required: false
+    default: 'false'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{inputs.dirpath}}
+    - ${{inputs.pds4_version}}
+    - ${{inputs.release}}
+
