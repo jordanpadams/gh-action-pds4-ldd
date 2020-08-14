@@ -55,7 +55,8 @@ echo $GITHUB_WORKSPACE
 
 # Generate Dictionaries
 log_info " Cleanup development versions if they exist"
-echo $dirpath
+echo "dirpath: $dirpath"
+echo $(dirname $dirpath)
 rm -fr $(dirname $dirpath)
 mkdir -p $dirpath
 cd $dirpath
