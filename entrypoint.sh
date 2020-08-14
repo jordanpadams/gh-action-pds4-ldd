@@ -56,8 +56,8 @@ echo $GITHUB_WORKSPACE
 # Generate Dictionaries
 log_info " Cleanup development versions if they exist"
 rm -fr $(dirname $dirpath)
-mkdir -p $dirname
-cd $dirname
+mkdir -p $dirpath
+cd $dirpath
 
 log_info "Generate dictionaries"
 dependencies_dir=$GITHUB_WORKSPACE/src/dependencies
