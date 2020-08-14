@@ -13,7 +13,7 @@ LABEL "com.github.actions.description"="Generated PDS4 Local Data Dictionaries f
 LABEL "com.github.actions.icon"="archive"
 LABEL "com.github.actions.color"="green"
 
-LABEL "repository"="https://github.com/NASA-PDS/gh-action-pds-ldd-gen.git"
+LABEL "repository"="https://github.com/NASA-PDS/gh-action-pds4-ldd.git"
 LABEL "homepage"="https://pds-data-dictionaries.github.io/"
 LABEL "maintainer"="Jordan Padams <jordan.h.padams@jpl.nasa.gov>"
 

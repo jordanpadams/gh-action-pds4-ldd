@@ -8,11 +8,11 @@
 
 ---
 
-name: '✅ PDS Engineering: PDS Validate'
+name: '✅ PDS LDD Generation'
 author: 'Jordan Padams <jordan.h.padams@jpl.nasa.gov>'
 branding:
-  icon: 'flag'
-  color: 'blue'
+  icon: 'archive'
+  color: 'green'
 
 inputs:
   dirpath:
