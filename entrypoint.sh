@@ -39,6 +39,10 @@ lddtool_version=$(curl --silent "https://api.github.com/repos/NASA-PDS/pds4-info
 # Get Latest IM Version
 im_version=$(curl --silent "https://raw.githubusercontent.com/NASA-PDS/pds4-information-model/v${lddtool_version}/model-ontology/src/ontology/Data/config.properties" | grep 'infoModelVersionId' | awk -F= '{print $NF}')
 
+echo foo
+python --version
+echo foo
+
 # Convert IM Version
 $(python -c "
 import string
