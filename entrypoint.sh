@@ -27,17 +27,6 @@ if [ -z "$dirpath" ]; then
     log_error "Valid directory path must be specified (dirpath)."
 fi
 
-dirpath=$GITHUB_WORKSPACE/$dirpath
-if  [ ! -d "$dirpath" ]; then
-    log_error "Valid directory path must be specified. Dirpath: $dirpath"
-fi
-
-# Check dirpath contains schemas / schematrons / labels to validate
-if ! ls $dirpath/*.xml 1> /dev/null 2>&1 ; then
-    ls $dirpath/*.xml
-    log_error "Invalid dirpath. Must contain at least one of schema, schematron, and XML label"
-fi
-
 if [ ! -z "$verbose" ] && [ "$verbose" == "true" ]; then
     DEBUG=0
 fi
