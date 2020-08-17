@@ -75,6 +75,7 @@ parent_dir=$(dirname $java_cmd)
 echo "parent dir $parent_dir"
 java_home=$(dirname $parent_dir)
 echo "java home $java_home"
+export JAVA_HOME=$java_home
 
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
