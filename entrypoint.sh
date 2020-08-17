@@ -60,6 +60,7 @@ gha_dir=$(dirname $datapath)
 parent_dir=$(dirname $gha_dir)
 rm -fr $parent_dir
 mkdir -p $datapath
+echo "Putting LDDs in $datapath"
 cd $datapath
 
 log_info "Generate dictionaries"
