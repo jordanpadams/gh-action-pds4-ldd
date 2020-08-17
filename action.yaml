@@ -15,7 +15,7 @@ branding:
   color: 'green'
 
 inputs:
-  dirpath:
+  datapath:
     description: |
       Absolute path to data to validate
     required: true
