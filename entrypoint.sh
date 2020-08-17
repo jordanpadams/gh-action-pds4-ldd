@@ -73,7 +73,7 @@ fi
 # Need to set JAVA_HOME because of the current way LDDTool works
 java_cmd=$(which java)
 echo java_cmd $java_cmd
-export JAVA_HOME=$(dirname $(dirname $JAVA_CMD))
+export JAVA_HOME=$(dirname $(dirname $java_cmd))
 
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
