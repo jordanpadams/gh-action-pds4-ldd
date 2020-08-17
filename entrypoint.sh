@@ -20,14 +20,14 @@ log_error () {
     exit 1
 }
 
-dirpath="$1"
+datapath="$1"
 pds4_version="$2"
 release="$3"
 verbose="$4"
 
-# Check valid dirpath is specified
-if [ -z "$dirpath" ]; then
-    log_error "Valid directory path must be specified (dirpath)."
+# Check valid datapath is specified
+if [ -z "$datapath" ]; then
+    log_error "Valid directory path must be specified (datapath)."
 fi
 
 if [ ! -z "$verbose" ] && [ "$verbose" == "true" ]; then
@@ -57,10 +57,10 @@ tar -xf /tmp/lddtool-${lddtool_version}-bin.tar.gz -C /tmp/
 
 # Generate Dictionaries
 log_info " Cleanup development versions if they exist"
-parent_dir=$(dirname $dirpath)
+parent_dir=$(dirname $datapath)
 rm -fr $parent_dir
-mkdir -p $dirpath
-cd $dirpath
+mkdir -p $datapath
+cd $datapath
 
 log_info "Generate dictionaries"
 dependencies_dir=$GITHUB_WORKSPACE/src/dependencies
