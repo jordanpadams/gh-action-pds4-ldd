@@ -28,10 +28,14 @@ inputs:
     default: 'false'
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{inputs.datapath}}
-    - ${{inputs.pds4_im_version}}
-    - ${{inputs.release}}
+  using: 'composite'
+  # using: 'composite'
+  # image: 'Dockerfile'
+  setps:
+    - run: ${{ github.action_path }}/entrypoint.sh
+      shell: bash
+      args:
+        - ${{inputs.datapath}}
+        - ${{inputs.pds4_im_version}}
+        - ${{inputs.release}}
 
