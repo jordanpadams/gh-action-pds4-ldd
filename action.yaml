@@ -32,10 +32,6 @@ runs:
   # using: 'composite'
   # image: 'Dockerfile'
   steps:
-    - run: ${{ github.action_path }}/entrypoint.sh
+    - run: '${{ github.action_path }}/entrypoint.sh "${{inputs.datapath}}" "${{inputs.pds4_im_version}}" "${{inputs.release}}"'
       shell: bash
-      args:
-        - ${{inputs.datapath}}
-        - ${{inputs.pds4_im_version}}
-        - ${{inputs.release}}
 
