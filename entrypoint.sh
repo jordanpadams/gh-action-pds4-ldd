@@ -69,6 +69,11 @@ else
   files="$GITHUB_WORKSPACE/src/*IngestLDD*.xml"
 fi
 
+java_cmd=$(which java)
+echo "java_cmd $java_cmd"
+parent_dir=$(dirname $java_cmd)
+echo "java home $(dirname parent_dir)"
+
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
 
