@@ -34,7 +34,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{inputs.dirpath}}
+    - ${{inputs.datapath}}
     - ${{inputs.pds4_version}}
     - ${{inputs.release}}
 
