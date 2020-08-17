@@ -23,7 +23,6 @@ log_error () {
 datapath="$1"
 im_version="$2"
 release="$3"
-verbose="$4"
 
 # Check valid datapath is specified
 if [ -z "$datapath" ]; then
@@ -52,7 +51,7 @@ lddtool_version=$(curl --silent "https://api.github.com/repos/NASA-PDS/pds4-info
 # im_version_alpha=$(echo $alpha_version)
 
 # Download and Unpack LDDTool
-wget --directory-prefix=/tmp https://github.com/NASA-PDS/pds4-information-model/releases/download/v${lddtool_version}/lddtool-${lddtool_version}-bin.tar.gz
+wget --directory-prefix=/tmp https://github.com/NASA-PDS/pds4-information-model/releases/download/${lddtool_version}/lddtool-${lddtool_version}-bin.tar.gz
 tar -xf /tmp/lddtool-${lddtool_version}-bin.tar.gz -C /tmp/
 
 # Generate Dictionaries
