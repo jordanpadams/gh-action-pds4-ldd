@@ -1,10 +1,7 @@
-# 📡 PDS Engineering: Git Ping Action
-# ===================================
+# 📡 PDS: Git Action for LDD Generation
+# =====================================
 #
-# This is a GitHub action that:
-# • Pings a remote repository on GitHub
-# • (By submitting an empty commit)
-# • And noting else!
+# This is a GitHub action that generates LDD for the current LDD Github Repo
 
 ---
 
@@ -19,7 +16,7 @@ inputs:
     description: |
       Absolute path to data to validate
     required: true
-  pds4_version:
+  pds4_im_version:
     description: |
       PDS4 Information Model Version. Defaults to the latest version. Use the semantic version, e.g. 1.14.0.0
     required: false
@@ -35,6 +32,6 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{inputs.datapath}}
-    - ${{inputs.pds4_version}}
+    - ${{inputs.pds4_im_version}}
     - ${{inputs.release}}
 
