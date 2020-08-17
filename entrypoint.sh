@@ -80,4 +80,12 @@ export JAVA_HOME=$java_home
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
 
+git config --local user.email "action@github.com"
+git config --local user.name "GitHub Action"
+git config --local github.token ${{ secrets.GITHUB_TOKEN }}
+git add $DEPLOY_DIR
+git commit -m "Auto-generated dictionaries from Github Actions"
+git config --global push.default current
+git push
+
 exit $?
