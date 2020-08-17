@@ -69,14 +69,6 @@ else
   files="$GITHUB_WORKSPACE/src/*IngestLDD*.xml"
 fi
 
-# Need to set JAVA_HOME because of the current way LDDTool works
-java_cmd=$(which java)
-echo java_cmd $java_cmd
-echo parent_dir $(dirname $java_cmd)
-parent_dir=$(dirname $java_cmd)
-export JAVA_HOME=$(dirname $parent_dir)
-echo JAVA_HOME=$JAVA_HOME
-
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
 
