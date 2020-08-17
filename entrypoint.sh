@@ -72,7 +72,9 @@ fi
 java_cmd=$(which java)
 echo "java_cmd $java_cmd"
 parent_dir=$(dirname $java_cmd)
-echo "java home $parent_dir"
+echo "parent dir $parent_dir"
+java_home=$(dirname $parent_dir)
+echo "java home $java_home"
 
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
