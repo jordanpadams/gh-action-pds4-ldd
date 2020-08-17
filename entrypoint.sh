@@ -21,7 +21,7 @@ log_error () {
 }
 
 datapath="$1"
-im_version="$2"
+pds4_im_version="$2"
 release="$3"
 
 # Check valid datapath is specified
