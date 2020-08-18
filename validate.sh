@@ -1,5 +1,3 @@
-#!/bin/sh
-
 log_info () {
     echo " [INFO] $@"
 }
@@ -60,7 +58,7 @@ exitcode=$?
 
 # Check for expected failure
 if $exitcode && [ "$failure_expected" == "true" ]; then
-    echo "[FAIL] Validate expected to fail, but executed successfully." 1>&2
+    echo "[FAIL] Validate expected to fail, but executed successfully."
     exit 1
 fi
 
