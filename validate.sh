@@ -53,13 +53,16 @@ if [ -n "$schematrons" ]; then
 fi
 
 # Validate the data
-/tmp/validate-${validate_version}/bin/validate -t $datapath/*.xml $args
-exitcode=$?
+/tmp/validate-${validate_version}/bin/validate -t $datapath/*_VALID.xml $args
+valid_exitcode=$?
+
+/tmp/validate-${validate_version}/bin/validate -t $datapath/*_FAIL.xml $args
+fail_exitcode=$?
 
 # Check for expected failure
-if $exitcode && [ "$failure_expected" == "true" ]; then
+if $fail_exitcode && [ "$failure_expected" == "true" ]; then
     echo "[FAIL] Validate expected to fail, but executed successfully."
     exit 1
 fi
 
-exit $exitcode
+exit $valid_exitcode
