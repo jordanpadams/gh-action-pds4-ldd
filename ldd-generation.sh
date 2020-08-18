@@ -79,7 +79,7 @@ log_info "Generating dictionaries for $files"
 
 exitcode=$?
 
-if $exitcode; then
+if [ $exitcode -eq 0 ]; then
   ls $datapath
 fi
 
