@@ -37,7 +37,9 @@ tar -xf /tmp/lddtool-${lddtool_version}-bin.tar.gz -C /tmp/
 # Generate Dictionaries
 log_info " Cleanup development versions if they exist"
 gha_dir=$(dirname $datapath)
+echo gha_dir $gha_dir
 parent_dir=$(dirname $gha_dir)
+echo parent_dir $parent_dir
 rm -fr $parent_dir
 mkdir -p $datapath
 cd $datapath
