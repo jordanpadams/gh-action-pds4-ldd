@@ -26,6 +26,10 @@ inputs:
       Flag to specify if this is intended as a release or a development build.
     required: false
     default: 'false'
+  github_token:
+    description: |
+      Github secret token
+    required: true
 
 runs:
   using: 'composite'
@@ -37,7 +41,7 @@ runs:
     - run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git config --local github.token ${{ secrets.GITHUB_TOKEN }}
+        git config --local github.token ${{ inputs.github_token }}
         git add $DEPLOY_DIR
         git commit -m "Auto-generated dictionaries from Github Actions"
         git config --global push.default current
