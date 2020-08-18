@@ -68,7 +68,7 @@ runs:
       shell: bash
 
     - run: |
-        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch"
+        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}/*.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch"
       shell: bash
 
     - run: |
@@ -76,7 +76,8 @@ runs:
           # Update info in examples
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
 
-          ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch"
+          ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR/*_VALID.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "false"
+          ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR/*_FAIL.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "true"
         else
           echo 'Regression Tests do not exist, skipping'
           exit 0
