@@ -60,7 +60,9 @@ runs:
     #     git config --global push.default current
     #     git push
     #   shell: bash
-    - run: '${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"'
+    - run: |
+        ls ${{ github.action_path }}
+        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"'
       shell: bash
 
     - run: |
