@@ -39,9 +39,6 @@ inputs:
       Flag to specify that validation failure is expected. This is intended for failure regression test cases.
     required: false
     default: 'false'
-  pds4_schema_url_base:
-    description: |
-      Base URL to PDS Core IM schema/schematron
   github_token:
     description: |
       Github secret token
@@ -66,7 +63,7 @@ runs:
     - run: |
           # Get the PDS core dictionaries
           mkdir -p $TMP_DICT_DIR
-          wget -q --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.xsd"
+          wget --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.xsd"
           wget -q --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.sch"
       shell: bash
 

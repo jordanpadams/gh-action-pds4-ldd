@@ -79,4 +79,10 @@ fi
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
 
-exit $?
+exitcode=$?
+
+if $exitcode; then
+  ls $datapath
+fi
+
+exit $exitcode
