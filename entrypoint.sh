@@ -60,7 +60,6 @@ gha_dir=$(dirname $datapath)
 parent_dir=$(dirname $gha_dir)
 rm -fr $parent_dir
 mkdir -p $datapath
-echo "Putting LDDs in $datapath"
 cd $datapath
 
 log_info "Generate dictionaries"
@@ -79,13 +78,5 @@ fi
 
 log_info "Generating dictionaries for $files"
 /tmp/lddtool-$lddtool_version/bin/lddtool -plJn $files
-
-# git config --local user.email "action@github.com"
-# git config --local user.name "GitHub Action"
-# git config --local github.token ${{ secrets.GITHUB_TOKEN }}
-# git add $DEPLOY_DIR
-# git commit -m "Auto-generated dictionaries from Github Actions"
-# git config --global push.default current
-# git push
 
 exit $?
