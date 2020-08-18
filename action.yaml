@@ -71,7 +71,7 @@ runs:
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" ${{inputs.test_dir}}/*.xml
 
           # Run VALID regression tests
-          valid_exit=0
+          valid_exit
           if ls ${{inputs.test_dir}}/*VALID.xml 1> /dev/null 2>&1 ; then
             ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*VALID.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "false"
             valid_exit=$?
