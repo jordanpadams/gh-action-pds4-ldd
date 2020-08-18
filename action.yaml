@@ -16,6 +16,11 @@ inputs:
     description: |
       Absolute path to data to validate
     required: true
+  pds4_im_short_version:
+    description: |
+      PDS4 Information Model Version. Defaults to the latest version. Use the short version, e.g. 1E00
+    required: false
+    default: 'latest'
   pds4_im_version:
     description: |
       PDS4 Information Model Version. Defaults to the latest version. Use the semantic version, e.g. 1.14.0.0
@@ -29,16 +34,16 @@ inputs:
     description: |
       Path(s) to schematrons to use for validation. By default, validate will use the schemas specified in the PDS4 labels.
     required: false
-  skip_content_validation:
-    description: |
-      Flag to disable data product content validation. This checks the actual bits in the data product match the XML specification. By default, this is enabled.
-    required: false
     default: 'false'
-  failure_expected:
+  pds_schema_url:
     description: |
-      Flag to specify that validation failure is expected. This is intended for failure regression test cases.
+      Base URL to the PDS Core schema.
     required: false
-    default: 'false'
+    default: 'https://pds.nasa.gov/pds4/pds/v1/'
+  test_dir:
+    description: |
+      Path to regression test data containing PDS4 labels.
+    required: false
   github_token:
     description: |
       Github secret token
@@ -49,7 +54,7 @@ runs:
   # using: 'composite'
   # image: 'Dockerfile'
   steps:
-    - run: '${{ github.action_path }}/entrypoint.sh "${{inputs.datapath}}" "${{inputs.pds4_im_version}}" "${{inputs.release}}"'
+    - run: '${{ github.action_path }}/ldd-generation.sh "${{inputs.datapath}}" "${{inputs.pds4_im_version}}" "${{inputs.release}}"'
       shell: bash
     # - run: |
     #     git config --local user.email "action@github.com"
@@ -62,14 +67,14 @@ runs:
     #   shell: bash
     - run: |
           # Get the PDS core dictionaries
-          mkdir -p $TMP_DICT_DIR
-          wget --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.xsd"
-          wget -q --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.sch"
+          mkdir -p /tmp/${{inputs.pds4_im_version}}
+          wget -q --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.xsd"
+          wget -q --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.sch"
       shell: bash
 
     - run: |
         # Simple validation of XML generated with schema
-        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}/*.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch"
+        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}/*.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch"
       shell: bash
 
     - run: |
@@ -79,10 +84,10 @@ runs:
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
 
           # Run VALID regression tests
-          ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR/*_VALID.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "false"
+          ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_VALID.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "false"
 
           # Run FAIL regression tests
-          ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR/*_FAIL.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "true"
+          ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_FAIL.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "true"
         else
           echo 'Regression Tests do not exist, skipping'
           exit 0

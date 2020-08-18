@@ -20,7 +20,8 @@ log_error () {
 }
 
 datapath="$1"
-release="$2"
+pds4_im_version="$2"
+release="$3"
 
 # Check valid datapath is specified
 if [ -z "$datapath" ]; then
