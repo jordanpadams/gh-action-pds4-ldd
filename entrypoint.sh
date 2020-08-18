@@ -1,4 +1,3 @@
-#!/bin/sh
 #
 # Script that generates PDS4 LDDs from an IngestLDD file
 #
