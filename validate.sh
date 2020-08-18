@@ -53,4 +53,4 @@ if [ "$failure_expected" == "true" ]; then
     fi
 fi
 
-exit 0
+exit $exitcode
