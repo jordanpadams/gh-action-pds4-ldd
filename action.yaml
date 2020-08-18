@@ -66,17 +66,23 @@ runs:
 
     - run: |
         # Perform regression testing if tests exist
-        if ls $REGRESSION_TEST_DIR/*.xml 1> /dev/null 2>&1 ; then
+        if ls ${{inputs.test_dir}}/*.xml 1> /dev/null 2>&1 ; then
           # Update info in examples
-          sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
+          sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" ${{inputs.test_dir}}/*.xml
 
           # Run VALID regression tests
-          ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_VALID.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "false"
-          valid_exit=$?
+          valid_exit
+          if ls ${{inputs.test_dir}}/*VALID.xml 1> /dev/null 2>&1 ; then
+            ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*VALID.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "false"
+            valid_exit=$?
+          fi
 
           # Run FAIL regression tests
-          ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_FAIL.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "true"
-          fail_exit=$?
+          fail_exit=0
+          if ls ${{inputs.test_dir}}/*FAIL.xml 1> /dev/null 2>&1 ; then
+            ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*FAIL.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "true"
+            fail_exit=$?
+          fi
 
           exit $valid_exit && $fail_exit
         else
