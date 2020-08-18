@@ -52,4 +52,5 @@ if [ "$failure_expected" == "true" ]; then
     fi
 fi
 
+echo $exitcode
 exit $exitcode
