@@ -78,7 +78,10 @@ runs:
           # Update info in examples
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
 
+          # Run VALID regression tests
           ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR/*_VALID.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "false"
+
+          # Run FAIL regression tests
           ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR/*_FAIL.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "true"
         else
           echo 'Regression Tests do not exist, skipping'
