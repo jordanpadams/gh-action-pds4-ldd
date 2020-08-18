@@ -62,11 +62,13 @@ runs:
     - run: |
         # Simple validation of XML generated with schema
         ${{ github.action_path }}/validate.sh "${{inputs.datapath}}/*.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch"
+        echo "BAR"
       shell: bash
 
     - run: |
         # Perform regression testing if tests exist
         if ls $REGRESSION_TEST_DIR/*.xml 1> /dev/null 2>&1 ; then
+          echo "FOO"
           # Update info in examples
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
 
@@ -85,13 +87,13 @@ runs:
         fi
       shell: bash
 
-    - run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git config --local github.token ${{ inputs.github_token }}
-        git add ${{inputs.datapath}}
-        git commit -m "Auto-generated dictionaries from Github Actions"
-        git config --global push.default current
-        git push
-      shell: bash
+    # - run: |
+    #     git config --local user.email "action@github.com"
+    #     git config --local user.name "GitHub Action"
+    #     git config --local github.token ${{ inputs.github_token }}
+    #     git add ${{inputs.datapath}}
+    #     git commit -m "Auto-generated dictionaries from Github Actions"
+    #     git config --global push.default current
+    #     git push
+    #   shell: bash
 

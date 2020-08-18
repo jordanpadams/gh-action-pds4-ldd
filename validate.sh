@@ -38,6 +38,7 @@ if [ -n "$schematrons" ]; then
 fi
 
 # Validate the data
+log_info "Validating $datapath"
 /tmp/validate-${validate_version}/bin/validate -t $datapath $args
 exitcode=$?
 
