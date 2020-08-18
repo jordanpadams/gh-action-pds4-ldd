@@ -73,12 +73,11 @@ runs:
 
           # Update info in examples
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
+
+          ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "${{inputs.skip_content_validation}}" "false"
         else
           echo 'Regression Tests do not exist, skipping'
           exit 0
         fi
       shell: bash
 
-    - run: |
-        ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "${{inputs.skip_content_validation}}" "false"
-      shell: bash
