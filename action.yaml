@@ -21,9 +21,22 @@ inputs:
       PDS4 Information Model Version. Defaults to the latest version. Use the semantic version, e.g. 1.14.0.0
     required: false
     default: 'latest'
-  release:
+  schemas:
     description: |
-      Flag to specify if this is intended as a release or a development build.
+      Path(s) to schemas to use for validation. By default, validate will use the schemas specified in the PDS4 labels.
+    required: false
+  schematrons:
+    description: |
+      Path(s) to schematrons to use for validation. By default, validate will use the schemas specified in the PDS4 labels.
+    required: false
+  skip_content_validation:
+    description: |
+      Flag to disable data product content validation. This checks the actual bits in the data product match the XML specification. By default, this is enabled.
+    required: false
+    default: 'false'
+  failure_expected:
+    description: |
+      Flag to specify that validation failure is expected. This is intended for failure regression test cases.
     required: false
     default: 'false'
   github_token:
