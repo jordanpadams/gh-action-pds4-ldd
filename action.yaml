@@ -61,7 +61,6 @@ runs:
     #     git push
     #   shell: bash
     - run: |
-        echo ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"
         ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"
       shell: bash
 
