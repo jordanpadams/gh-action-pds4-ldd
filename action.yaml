@@ -44,10 +44,6 @@ inputs:
     description: |
       Path to regression test data containing PDS4 labels.
     required: false
-  github_token:
-    description: |
-      Github secret token
-    required: true
 
 runs:
   using: 'composite'
