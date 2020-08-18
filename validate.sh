@@ -42,7 +42,6 @@ fi
 exitcode=$?
 
 # Check for expected failure
-echo "$failure_expected"
 if [ "$failure_expected" == "true" ]; then
     if [ $exitcode -eq 0 ]; then
         echo "[FAIL] Validate errors expected, but execution completed successfully."
@@ -52,5 +51,7 @@ if [ "$failure_expected" == "true" ]; then
         exitcode=0
     fi
 fi
+
+echo exitcode: $exitcode
 
 exit $exitcode
