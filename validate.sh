@@ -45,10 +45,11 @@ exitcode=$?
 if [ "$failure_expected" == "true" ]; then
     if [ $exitcode -eq 0 ]; then
         echo "[FAIL] Validate errors expected, but execution completed successfully."
-        exitcode=1
+        exit 1
     else
         echo "[SUCCESS] Validate errors are expected."
-        exitcode=0
+        exit 0
     fi
 fi
 
+exit $exitcode
