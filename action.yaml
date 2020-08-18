@@ -68,7 +68,9 @@ runs:
     - run: |
           # Get the PDS core dictionaries
           echo "FOO"
+          echo ${{inputs.pds4_im_version}}
           mkdir -p /tmp/${{inputs.pds4_im_version}}
+          echo ${{inputs.pds_schema_url}}
           wget -q --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.xsd"
           wget -q --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.sch"
       shell: bash
