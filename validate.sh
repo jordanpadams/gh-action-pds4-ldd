@@ -47,7 +47,7 @@ if [ -n "$schematrons" ]; then
     args="$args -S $schematrons"
 fi
 
-if [ "$skip_content_validation" == "true" ]; then
+if [ -n "$skip_content_validation" ] && [ "$skip_content_validation" == "true" ]; then
     args="$args --skip-content-validation"
 fi
 
