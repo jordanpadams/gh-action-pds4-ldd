@@ -61,8 +61,8 @@ runs:
     #     git push
     #   shell: bash
     - run: |
-        ls ${{ github.action_path }}
-        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"'
+        echo ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"
+        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"
       shell: bash
 
     - run: |
@@ -80,5 +80,6 @@ runs:
         fi
       shell: bash
 
-    - run: '${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "${{inputs.skip_content_validation}}" "false"'
+    - run: |
+        ${{ github.action_path }}/validate.sh "$REGRESSION_TEST_DIR" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch" "${{inputs.skip_content_validation}}" "false"
       shell: bash

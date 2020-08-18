@@ -10,10 +10,15 @@ log_error () {
 }
 
 datapath="$1"
+echo $datapath
 schemas="$2"
+echo $schemas
 schematrons="$3"
+echo $schematrons
 skip_content_validation="$4"
+echo $skip_content_validation
 failure_expected="$5"
+echo $failure_expected
 
 # Check valid datapath is specified
 if [ -z "$datapath" ]; then
@@ -34,21 +39,19 @@ validate_version=$(curl --silent "https://api.github.com/repos/NASA-PDS/validate
 log_info "Validate version: $validate_version"
 
 # Download the latest version and unpack
-wget -q --directory-prefix=/tmp https://github.com/NASA-PDS/validate/releases/download/${validate_version}/validate-${validate_version}-bin.tar.gz
-tar -xf /tmp/validate-${validate_version}-bin.tar.gz -C /tmp/
+if [ ! -f "/tmp/validate-${validate_version}-bin.tar.gz" ]; then
+    wget -q --directory-prefix=/tmp https://github.com/NASA-PDS/validate/releases/download/${validate_version}/validate-${validate_version}-bin.tar.gz
+    tar -xf /tmp/validate-${validate_version}-bin.tar.gz -C /tmp/
+fi
 
 # Add applicable Validate arguments per action options
-args="-R pds4.label"
+args="-R pds4.label --skip-content-validation"
 if [ -n "$schemas" ]; then
     args="$args -x $schemas"
 fi
 
 if [ -n "$schematrons" ]; then
     args="$args -S $schematrons"
-fi
-
-if [ -n "$skip_content_validation" ] && [ "$skip_content_validation" == 'true' ]; then
-    args="$args --skip-content-validation"
 fi
 
 # Validate the data
