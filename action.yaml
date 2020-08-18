@@ -62,14 +62,6 @@ runs:
     #   shell: bash
     - run: '${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"'
       shell: bash
-    - id: tests_exist_check
-      run: |
-        # Check dirpath contains schemas / schematrons / labels to validate
-        
-          echo "::set-output name=skipped::true"
-          echo 'Regression Tests do not exist, skipping'
-        fi
-      shell: bash
 
     - run: |
         if ls $REGRESSION_TEST_DIR/*.xml 1> /dev/null 2>&1 ; then
@@ -84,6 +76,9 @@ runs:
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
 
           ls $DEPLOY_DIR
+        else
+          echo 'Regression Tests do not exist, skipping'
+          exit 0
         fi
       shell: bash
 
