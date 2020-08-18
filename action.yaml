@@ -47,6 +47,6 @@ runs:
         git config --global push.default current
         git push
       shell: bash
-    - run: '${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.pds4_im_version}}" "${{inputs.release}}"'
+    - run: '${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"'
       shell: bash
 
