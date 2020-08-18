@@ -27,10 +27,6 @@ if [ -z "$datapath" ]; then
     log_error "Valid directory path must be specified (datapath)."
 fi
 
-if [ ! -z "$verbose" ] && [ "$verbose" == "true" ]; then
-    DEBUG=0
-fi
-
 # Get Latest LDDTool and Validate Versions
 lddtool_version=$(curl --silent "https://api.github.com/repos/NASA-PDS/pds4-information-model/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/v//')
 
