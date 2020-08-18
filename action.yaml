@@ -68,10 +68,12 @@ runs:
       shell: bash
 
     - run: |
+        # Simple validation of XML generated with schema
         ${{ github.action_path }}/validate.sh "${{inputs.datapath}}/*.xml" "${{inputs.schemas}} $TMP_DICT_DIR/*.xsd" "${{inputs.schematrons}} $TMP_DICT_DIR/*.sch"
       shell: bash
 
     - run: |
+        # Perform regression testing if tests exist
         if ls $REGRESSION_TEST_DIR/*.xml 1> /dev/null 2>&1 ; then
           # Update info in examples
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
