@@ -70,18 +70,18 @@ runs:
           # Update info in examples
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
 
-          # Run VALID regression tests
-          ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_VALID.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "false"
-          valid_exit=$?
+        #   # Run VALID regression tests
+        #   ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_VALID.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "false"
+        #   valid_exit=$?
 
-          # Run FAIL regression tests
-          ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_FAIL.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "true"
-          fail_exit=$?
+        #   # Run FAIL regression tests
+        #   ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*_FAIL.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "true"
+        #   fail_exit=$?
 
-          exit $valid_exit && $fail_exit
-        else
-          echo 'Regression Tests do not exist, skipping'
-          exit 0
+        #   exit $valid_exit && $fail_exit
+        # else
+        #   echo 'Regression Tests do not exist, skipping'
+        #   exit 0
         fi
       shell: bash
 
