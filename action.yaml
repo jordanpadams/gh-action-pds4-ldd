@@ -51,15 +51,38 @@ runs:
   steps:
     - run: '${{ github.action_path }}/entrypoint.sh "${{inputs.datapath}}" "${{inputs.pds4_im_version}}" "${{inputs.release}}"'
       shell: bash
-    - run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git config --local github.token ${{ inputs.github_token }}
-        git add $DEPLOY_DIR
-        git commit -m "Auto-generated dictionaries from Github Actions"
-        git config --global push.default current
-        git push
-      shell: bash
+    # - run: |
+    #     git config --local user.email "action@github.com"
+    #     git config --local user.name "GitHub Action"
+    #     git config --local github.token ${{ inputs.github_token }}
+    #     git add $DEPLOY_DIR
+    #     git commit -m "Auto-generated dictionaries from Github Actions"
+    #     git config --global push.default current
+    #     git push
+    #   shell: bash
     - run: '${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"'
       shell: bash
+    - id: tests_exist_check
+      run: |
+        # Check dirpath contains schemas / schematrons / labels to validate
+        if ls $REGRESSION_TEST_DIR/*.xml 1> /dev/null 2>&1 ; then
+          echo "::set-output name=skipped::true"
+          echo 'Regression Tests do not exist, skipping'
+        fi
+      shell: bash
+
+    - run: |
+        # Get the PDS core dictionaries
+        mkdir -p $TMP_DICT_DIR
+        wget -q --directory-prefix=$TMP_DICT_DIR "https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_${IM_VERSION_SHORT}.xsd"
+        wget -q --directory-prefix=$TMP_DICT_DIR "https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_${IM_VERSION_SHORT}.sch"
+
+        ls -al $REGRESSION_TEST_DIR/*.xml
+
+        # Update info in examples
+        sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
+
+        ls $DEPLOY_DIR
+
+      if: ${{ steps.tests_exist_check.outputs.skipped }} != 'true'
 
