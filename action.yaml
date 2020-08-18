@@ -68,6 +68,7 @@ runs:
           mkdir -p $TMP_DICT_DIR
           wget -q --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.xsd"
           wget -q --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.sch"
+      shell: bash
 
     - run: |
         ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"
