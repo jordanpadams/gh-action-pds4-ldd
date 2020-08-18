@@ -39,6 +39,9 @@ inputs:
       Flag to specify that validation failure is expected. This is intended for failure regression test cases.
     required: false
     default: 'false'
+  pds4_schema_url_base:
+    description: |
+      Base URL to PDS Core IM schema/schematron
   github_token:
     description: |
       Github secret token
@@ -61,16 +64,17 @@ runs:
     #     git push
     #   shell: bash
     - run: |
+          # Get the PDS core dictionaries
+          mkdir -p $TMP_DICT_DIR
+          wget -q --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.xsd"
+          wget -q --directory-prefix=$TMP_DICT_DIR "${PDS_SCHEMA_URL}/PDS4_PDS_${IM_VERSION_SHORT}.sch"
+
+    - run: |
         ${{ github.action_path }}/validate.sh "${{inputs.datapath}}" "${{inputs.schemas}}" "${{inputs.schematrons}}" "${{inputs.skip_content_validation}}" "false"
       shell: bash
 
     - run: |
         if ls $REGRESSION_TEST_DIR/*.xml 1> /dev/null 2>&1 ; then
-          # Get the PDS core dictionaries
-          mkdir -p $TMP_DICT_DIR
-          wget -q --directory-prefix=$TMP_DICT_DIR "https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_${IM_VERSION_SHORT}.xsd"
-          wget -q --directory-prefix=$TMP_DICT_DIR "https://pds.nasa.gov/pds4/pds/v1/PDS4_PDS_${IM_VERSION_SHORT}.sch"
-
           # Update info in examples
           sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" $REGRESSION_TEST_DIR/*.xml
 

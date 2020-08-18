@@ -8,15 +8,10 @@ log_error () {
 }
 
 datapath="$1"
-echo $datapath
 schemas="$2"
-echo $schemas
 schematrons="$3"
-echo $schematrons
 skip_content_validation="$4"
-echo $skip_content_validation
 failure_expected="$5"
-echo $failure_expected
 
 # Check valid datapath is specified
 if [ -z "$datapath" ]; then
