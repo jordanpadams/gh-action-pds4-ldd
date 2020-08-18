@@ -16,14 +16,14 @@ inputs:
     description: |
       Absolute path to data to validate
     required: true
-  pds4_im_short_version:
-    description: |
-      PDS4 Information Model Version. Defaults to the latest version. Use the short version, e.g. 1E00
-    required: false
-    default: 'latest'
   pds4_im_version:
     description: |
       PDS4 Information Model Version. Defaults to the latest version. Use the semantic version, e.g. 1.14.0.0
+    required: false
+    default: 'latest'
+  pds4_im_short_version:
+    description: |
+      PDS4 Information Model Version. Defaults to the latest version. Use the short version, e.g. 1E00
     required: false
     default: 'latest'
   schemas:
@@ -67,12 +67,9 @@ runs:
     #   shell: bash
     - run: |
           # Get the PDS core dictionaries
-          echo "FOO"
-          echo ${{inputs.pds4_im_version}}
           mkdir -p /tmp/${{inputs.pds4_im_version}}
-          echo ${{inputs.pds_schema_url}}
-          wget --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.xsd"
-          wget --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.sch"
+          wget -q --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.xsd"
+          wget -q --directory-prefix=$/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.sch"
       shell: bash
 
     - run: |
