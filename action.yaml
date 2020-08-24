@@ -12,7 +12,7 @@ branding:
   color: 'green'
 
 inputs:
-  datapath:
+  data_path:
     description: |
       Absolute path to data to validate
     required: true
@@ -21,70 +21,92 @@ inputs:
       PDS4 Information Model Version. Defaults to the latest version. Use the semantic version, e.g. 1.14.0.0
     required: false
     default: 'latest'
-  pds4_im_short_version:
+  pds4_development_release:
     description: |
-      PDS4 Information Model Version. Defaults to the latest version. Use the short version, e.g. 1E00
+      Flag to signify if this is a development release of the PDS4 Information Model
     required: false
-    default: 'latest'
-  schemas:
+    default: False
+  lddtool_development_release:
     description: |
-      Path(s) to schemas to use for validation. By default, validate will use the schemas specified in the PDS4 labels.
+      Flag to signify if the software should use the LDD Development release version
     required: false
-  schematrons:
-    description: |
-      Path(s) to schematrons to use for validation. By default, validate will use the schemas specified in the PDS4 labels.
-    required: false
-    default: 'false'
-  pds_schema_url:
-    description: |
-      Base URL to the PDS Core schema.
-    required: false
-    default: 'https://pds.nasa.gov/pds4/pds/v1/'
-  test_dir:
+    default: False
+  test_path:
     description: |
       Path to regression test data containing PDS4 labels.
     required: false
+  logs_path:
+    description: |
+      Path to output software run logs
+    required: false
+    default: '/tmp/logs'
+  token:
+    description: |
+      Github token
+    required: true
 
 runs:
   using: 'composite'
-  # using: 'composite'
-  # image: 'Dockerfile'
+
   steps:
-    - run: '${{ github.action_path }}/ldd-generation.sh "${{inputs.datapath}}" "${{inputs.pds4_im_version}}"'
-      shell: bash
     - run: |
-          # Get the PDS core dictionaries
-          mkdir -p /tmp/${{inputs.pds4_im_version}}
-          wget -q --directory-prefix=/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.xsd"
-          wget -q --directory-prefix=/tmp/${{inputs.pds4_im_version}} "${{inputs.pds_schema_url}}/PDS4_PDS_${{inputs.pds4_im_short_version}}.sch"
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install pds-github-util
       shell: bash
 
     - run: |
-        # Simple validation of XML generated with schema
-        ${{ github.action_path }}/validate.sh "${{inputs.datapath}}/*.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch"
+        dev_release=""
+        if [ "${{inputs.lddtool_development_release}}" == "true" ]; then
+          dev_release="--use_lddtool_unstable --with_pds4_version ${{inputs.pds4_im_version}}"
+        fi
+
+        ldd-gen --ingest_ldd_src_dir $GITHUB_WORKSPACE/src --ldd_output_path "${{inputs.data_path}}" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+
+        # TODO Use --with_pds4_version once new LDDTool is released
+        # ldd-gen --ingest_ldd_src_path $GITHUB_WORKSPACE --ldd_output_path "${{inputs.data_path}}" --with_pds4_version "${{inputs.pds4_im_version}}" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}}
       shell: bash
 
     - run: |
-        # Perform regression testing if tests exist
-        if ls ${{inputs.test_dir}}/*.xml 1> /dev/null 2>&1 ; then
+        dev_release=""
+        if [ "${{inputs.pds4_development_release}}" == "true" ]; then
+          dev_release="--development_release"
+        fi
+
+        pds4-validate --datapath "${{inputs.data_path}}/*.xml" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+      shell: bash
+
+    - run: |
+        # Perform regression testing for VALID tests
+        filepath="${{inputs.test_path}}/*VALID.xml"
+        if ls $filepath 1> /dev/null 2>&1 ; then
           # Update info in examples
-          sed -i "s/\[IM_VERSION\]/$IM_VERSION/g" ${{inputs.test_dir}}/*.xml
+          sed -i "s/\[IM_VERSION\]/${{inputs.pds4_im_version}}/g" $filepath
 
-          # Run VALID regression tests
-          valid_exit=0
-          if ls ${{inputs.test_dir}}/*VALID.xml 1> /dev/null 2>&1 ; then
-            ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*VALID.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "false"
-            valid_exit=$?
+          dev_release=""
+          if [ "${{inputs.pds4_development_release}}" == "true" ]; then
+            dev_release="--development_release"
           fi
 
-          # Run FAIL regression tests
-          fail_exit=0
-          if ls ${{inputs.test_dir}}/*FAIL.xml 1> /dev/null 2>&1 ; then
-            ${{ github.action_path }}/validate.sh "${{inputs.test_dir}}/*FAIL.xml" "${{inputs.schemas}} /tmp/${{inputs.pds4_im_version}}/*.xsd" "${{inputs.schematrons}} /tmp/${{inputs.pds4_im_version}}/*.sch" "true"
-            fail_exit=$?
+          pds4-validate --datapath "$filepath" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+        else
+          echo 'Regression Tests do not exist, skipping'
+          exit 0
+        fi
+      shell: bash
+
+    - run: |
+        # Perform regression testing for FAILURE tests
+        filepath="${{inputs.test_path}}/*FAIL.xml"
+        if ls $filepath 1> /dev/null 2>&1 ; then
+          # Update info in examples
+          sed -i "s/\[IM_VERSION\]/${{inputs.pds4_im_version}}/g" $filepath
+
+          dev_release=""
+          if [ "${{inputs.pds4_development_release}}" == "true" ]; then
+            dev_release="--development_release"
           fi
 
-          exit $valid_exit && $fail_exit
+          pds4-validate --failure_expected --datapath "$filepath" --skip_content_validation  --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
         else
           echo 'Regression Tests do not exist, skipping'
           exit 0
