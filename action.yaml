@@ -100,7 +100,7 @@ runs:
         fi
 
         skip_content_validation=""
-        if [ "${{inputs.enable_content_validation}}" == "true" ]; then
+        if [ "${{inputs.enable_content_validation}}" == "false" ]; then
           skip_content_validation="--skip_content_validation"
         fi
 
@@ -127,7 +127,7 @@ runs:
         fi
 
         skip_content_validation=""
-        if [ "${{inputs.enable_content_validation}}" == "true" ]; then
+        if [ "${{inputs.enable_content_validation}}" == "false" ]; then
           skip_content_validation="--skip_content_validation"
         fi
 
