@@ -44,6 +44,11 @@ inputs:
     description: |
       Github token
     required: true
+  enable_content_validation:
+    description: |
+      Flag to signify if validate should include content validation. By default, this is disabled.
+    required: false
+    default: False
 
 runs:
   using: 'composite'
@@ -94,7 +99,12 @@ runs:
           dev_release="--development_release"
         fi
 
-        pds4-validate --datapath "$filepath" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+        skip_content_validation=""
+        if [ "${{inputs.enable_content_validation}}" == "true" ]; then
+          skip_content_validation="--skip_content_validation"
+        fi
+
+        pds4-validate --datapath "$filepath" $skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
       shell: bash
 
     - run: |
@@ -116,5 +126,10 @@ runs:
           dev_release="--development_release"
         fi
 
-        pds4-validate --failure_expected --datapath "$filepath" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+        skip_content_validation=""
+        if [ "${{inputs.enable_content_validation}}" == "true" ]; then
+          skip_content_validation="--skip_content_validation"
+        fi
+
+        pds4-validate --failure_expected --datapath "$filepath" $skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
       shell: bash
