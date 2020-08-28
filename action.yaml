@@ -77,38 +77,44 @@ runs:
 
     - run: |
         # Perform regression testing for VALID tests
-        filepath="${{inputs.test_path}}/*VALID.xml"
-        if ls $filepath 1> /dev/null 2>&1 ; then
-          # Update info in examples
-          sed -i "s/\[IM_VERSION\]/${{inputs.pds4_im_version}}/g" $filepath
-
-          dev_release=""
-          if [ "${{inputs.pds4_development_release}}" == "true" ]; then
-            dev_release="--development_release"
-          fi
-
-          pds4-validate --datapath "$filepath" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+        if ls ${{inputs.test_path}}/*VALID.xml 1> /dev/null 2>&1 ; then
+          filepath="${{inputs.test_path}}/*VALID.xml"
+        elif ls ${{inputs.test_path}}/*/*VALID.xml 1> /dev/null 2>&1 ; then
+          filepath="${{inputs.test_path}}/*/*VALID.xml"
         else
           echo 'Regression Tests do not exist, skipping'
           exit 0
         fi
+
+        # Update info in examples
+        sed -i "s/\[IM_VERSION\]/${{inputs.pds4_im_version}}/g" $filepath
+
+        dev_release=""
+        if [ "${{inputs.pds4_development_release}}" == "true" ]; then
+          dev_release="--development_release"
+        fi
+
+        pds4-validate --datapath "$filepath" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
       shell: bash
 
     - run: |
-        # Perform regression testing for FAILURE tests
-        filepath="${{inputs.test_path}}/*FAIL.xml"
-        if ls $filepath 1> /dev/null 2>&1 ; then
-          # Update info in examples
-          sed -i "s/\[IM_VERSION\]/${{inputs.pds4_im_version}}/g" $filepath
-
-          dev_release=""
-          if [ "${{inputs.pds4_development_release}}" == "true" ]; then
-            dev_release="--development_release"
-          fi
-
-          pds4-validate --failure_expected --datapath "$filepath" --skip_content_validation  --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+        # Perform regression testing for FAIL tests
+        if ls ${{inputs.test_path}}/*FAIL.xml 1> /dev/null 2>&1 ; then
+          filepath="${{inputs.test_path}}/*FAIL.xml"
+        elif ls ${{inputs.test_path}}/*/*FAIL.xml 1> /dev/null 2>&1 ; then
+          filepath="${{inputs.test_path}}/*/*FAIL.xml"
         else
           echo 'Regression Tests do not exist, skipping'
           exit 0
         fi
+
+        # Update info in examples
+        sed -i "s/\[IM_VERSION\]/${{inputs.pds4_im_version}}/g" $filepath
+
+        dev_release=""
+        if [ "${{inputs.pds4_development_release}}" == "true" ]; then
+          dev_release="--development_release"
+        fi
+
+        pds4-validate --datapath "$filepath" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
       shell: bash
