@@ -63,12 +63,11 @@ runs:
         dev_release=""
         if [ "${{inputs.lddtool_development_release}}" == "true" ]; then
           dev_release="--use_lddtool_unstable --with_pds4_version ${{inputs.pds4_im_version}}"
+          # TODO Use --with_pds4_version once new LDDTool is released
+          ldd-gen --ingest_ldd_src_dir $GITHUB_WORKSPACE/src --ldd_output_path "${{inputs.data_path}}" --with_pds4_version "${{inputs.pds4_im_version}}" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
         fi
 
-        # ldd-gen --ingest_ldd_src_dir $GITHUB_WORKSPACE/src --ldd_output_path "${{inputs.data_path}}" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
-
-        # TODO Use --with_pds4_version once new LDDTool is released
-        ldd-gen --ingest_ldd_src_dir $GITHUB_WORKSPACE/src --ldd_output_path "${{inputs.data_path}}" --with_pds4_version "${{inputs.pds4_im_version}}" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+        ldd-gen --ingest_ldd_src_dir $GITHUB_WORKSPACE/src --ldd_output_path "${{inputs.data_path}}" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
       shell: bash
 
     - run: |
