@@ -136,3 +136,7 @@ runs:
           pds4-validate --failure_expected --datapath "$file" $skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
         done
       shell: bash
+
+    - run: |
+        ldd-release --ingest_ldd_src_dir $GITHUB_WORKSPACE/src --ldd_output_path "${{inputs.data_path}}" --token ${{inputs.token}} --dev
+      shell: bash
