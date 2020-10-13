@@ -77,6 +77,7 @@ runs:
         fi
 
         pds4-validate --datapath "${{inputs.data_path}}/*.xml" --skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
+        rm -fr /tmp
       shell: bash
 
     - run: |
