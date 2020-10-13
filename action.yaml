@@ -137,6 +137,3 @@ runs:
         done
       shell: bash
 
-    - run: |
-        ldd-release --ingest_ldd_src_dir $GITHUB_WORKSPACE/src --ldd_output_path "${{inputs.data_path}}" --token ${{inputs.token}} --dev
-      shell: bash
