@@ -101,6 +101,7 @@ runs:
           skip_content_validation="--skip_content_validation"
         fi
 
+        find "$filepath" -type f
         for file in $(find "$filepath" -type f); do
           pds4-validate --datapath $file $skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
         done
@@ -130,6 +131,7 @@ runs:
           skip_content_validation="--skip_content_validation"
         fi
 
+        find "$filepath" -type f
         for file in $(find "$filepath" -type f); do
           pds4-validate --failure_expected --datapath "$file" $skip_content_validation --with_pds4_version ${{inputs.pds4_im_version}} --schemas "${{inputs.data_path}}/*.xsd" --schematrons "${{inputs.data_path}}/*.sch" --token ${{inputs.token}} --output_log_path ${{inputs.logs_path}} $dev_release
         done
